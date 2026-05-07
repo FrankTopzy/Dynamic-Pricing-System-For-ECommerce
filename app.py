@@ -34,8 +34,34 @@ def get_training_target_range(path: str = "dynamic_pricing_dataset.csv"):
         return None
 
 
+def load_model_with_recovery(model_path: Path):
+    try:
+        with open(model_path, "rb") as model_file:
+            return pickle.load(model_file)
+    except (FileNotFoundError, ModuleNotFoundError, AttributeError) as exc:
+        st.warning(
+            "Model file could not be loaded in this environment. "
+            "Attempting to retrain and regenerate `pricing_model.pkl`..."
+        )
+        try:
+            from train_model import main as train_main
+
+            train_main()
+            with open(model_path, "rb") as model_file:
+                return pickle.load(model_file)
+        except Exception as retrain_exc:
+            st.error(
+                "Unable to load or rebuild the model automatically. "
+                "Please confirm deployment dependencies are installed "
+                "(especially scikit-learn, pandas, numpy)."
+            )
+            st.exception(retrain_exc)
+            st.stop()
+        st.stop()
+
+
 # Load trained model
-model = pickle.load(open(MODEL_PATH, "rb"))
+model = load_model_with_recovery(MODEL_PATH)
 
 st.title("Dynamic Pricing Prediction System")
 
