@@ -65,7 +65,7 @@ model = load_model_with_recovery(MODEL_PATH)
 
 st.title("Dynamic Pricing Prediction System")
 
-st.write("Adjust the sliders to predict the optimal price")
+st.write("Enter product and market values to predict the optimal price")
 
 @st.cache_data(show_spinner=False)
 def get_training_ranges(path: str = str(DATA_PATH)):
@@ -92,74 +92,102 @@ def get_training_ranges(path: str = str(DATA_PATH)):
 
 ranges = get_training_ranges()
 
-# Sliders for inputs
+# Numeric inputs
 product_id_min, product_id_max = (0, 10000)
 if ranges and "product_id" in ranges:
     product_id_min, product_id_max = int(ranges["product_id"][0]), int(ranges["product_id"][1])
 product_id_default = int((product_id_min + product_id_max) / 2)
-product_id = st.slider("Product ID", int(product_id_min), int(product_id_max), product_id_default)
+product_id = st.number_input(
+    "Product ID",
+    min_value=int(product_id_min),
+    max_value=int(product_id_max),
+    value=product_id_default,
+    step=1,
+)
 
 current_price_min, current_price_max = (0.0, 10000.0)
 if ranges and "current_price" in ranges:
     current_price_min, current_price_max = ranges["current_price"]
 current_price_default = float((current_price_min + current_price_max) / 2)
-current_price = st.slider(
+current_price = st.number_input(
     "Current Price",
-    float(current_price_min),
-    float(current_price_max),
-    float(current_price_default),
+    min_value=float(current_price_min),
+    max_value=float(current_price_max),
+    value=float(current_price_default),
+    step=0.01,
 )
 
 competitor_price_min, competitor_price_max = (0.0, 10000.0)
 if ranges and "competitor_price" in ranges:
     competitor_price_min, competitor_price_max = ranges["competitor_price"]
 competitor_price_default = float((competitor_price_min + competitor_price_max) / 2)
-competitor_price = st.slider(
+competitor_price = st.number_input(
     "Competitor Price",
-    float(competitor_price_min),
-    float(competitor_price_max),
-    float(competitor_price_default),
+    min_value=float(competitor_price_min),
+    max_value=float(competitor_price_max),
+    value=float(competitor_price_default),
+    step=0.01,
 )
 
 demand_min, demand_max = (0, 1000)
 if ranges and "demand_last_week" in ranges:
     demand_min, demand_max = int(ranges["demand_last_week"][0]), int(ranges["demand_last_week"][1])
 demand_default = int((demand_min + demand_max) / 2)
-demand_last_week = st.slider("Demand Last Week", int(demand_min), int(demand_max), demand_default)
+demand_last_week = st.number_input(
+    "Demand Last Week",
+    min_value=int(demand_min),
+    max_value=int(demand_max),
+    value=demand_default,
+    step=1,
+)
 
 stock_min, stock_max = (0, 1000)
 if ranges and "stock_level" in ranges:
     stock_min, stock_max = int(ranges["stock_level"][0]), int(ranges["stock_level"][1])
 stock_default = int((stock_min + stock_max) / 2)
-stock_level = st.slider("Stock Level", int(stock_min), int(stock_max), stock_default)
+stock_level = st.number_input(
+    "Stock Level",
+    min_value=int(stock_min),
+    max_value=int(stock_max),
+    value=stock_default,
+    step=1,
+)
 
 marketing_spend_min, marketing_spend_max = (0.0, 5000.0)
 if ranges and "marketing_spend" in ranges:
     marketing_spend_min, marketing_spend_max = ranges["marketing_spend"]
 marketing_spend_default = float((marketing_spend_min + marketing_spend_max) / 2)
-marketing_spend = st.slider(
+marketing_spend = st.number_input(
     "Marketing Spend",
-    float(marketing_spend_min),
-    float(marketing_spend_max),
-    float(marketing_spend_default),
+    min_value=float(marketing_spend_min),
+    max_value=float(marketing_spend_max),
+    value=float(marketing_spend_default),
+    step=0.01,
 )
 
 rating_min, rating_max = (1.0, 5.0)
 if ranges and "customer_rating" in ranges:
     rating_min, rating_max = ranges["customer_rating"]
 customer_rating_default = float((rating_min + rating_max) / 2)
-customer_rating = st.slider(
+customer_rating = st.number_input(
     "Customer Rating",
-    float(rating_min),
-    float(rating_max),
-    float(customer_rating_default),
+    min_value=float(rating_min),
+    max_value=float(rating_max),
+    value=float(customer_rating_default),
+    step=0.01,
 )
 
 units_min, units_max = (0, 1000)
 if ranges and "units_sold" in ranges:
     units_min, units_max = int(ranges["units_sold"][0]), int(ranges["units_sold"][1])
 units_default = int((units_min + units_max) / 2)
-units_sold = st.slider("Units Sold", int(units_min), int(units_max), units_default)
+units_sold = st.number_input(
+    "Units Sold",
+    min_value=int(units_min),
+    max_value=int(units_max),
+    value=units_default,
+    step=1,
+)
 
 season = st.selectbox("Season", ["festival", "monsoon", "summer", "winter"])
 
