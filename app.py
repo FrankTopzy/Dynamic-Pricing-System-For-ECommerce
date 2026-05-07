@@ -243,8 +243,10 @@ if st.button("Predict Optimal Price"):
                 f"({min_price:.2f}–{max_price:.2f}). Showing a clipped value for safety."
             )
 
-    st.success(f"Recommended Price: {clipped_price:.2f}")
+    st.success(f"Recommended Price: ₦{clipped_price:,.2f}")
     if show_debug:
-        st.write(f"Raw prediction: {raw_price:.2f}")
+        st.write(f"Raw prediction: ₦{raw_price:,.2f}")
         if target_range is not None:
-            st.write(f"Training target range: {target_range[0]:.2f}–{target_range[1]:.2f}")
+            st.write(
+                f"Training target range: ₦{target_range[0]:,.2f}–₦{target_range[1]:,.2f}"
+            )
